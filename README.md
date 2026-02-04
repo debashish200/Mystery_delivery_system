@@ -26,6 +26,12 @@ Run:
 python main.py
 Reports will be generated in the output folder
 
+Bonus Features
+----------------
+->Random delivery delay (1–5 min)
+->ASCII route visualization
+->CSV export of top performer
+
 🎯 Evaluation Criteria Covered
 -------------------------------
 ->JSON Parsing
