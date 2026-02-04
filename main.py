@@ -1,6 +1,8 @@
 import json
 import math
 import os
+import random
+import csv
 
 
 # Distance function
@@ -36,7 +38,7 @@ for filename in os.listdir(TESTCASE_FOLDER):
                 "total_distance": 0.0,
                 "efficiency": 0.0
             }
-
+        print(f"\nProcessing {filename}")
         
         # Assign packages
         for pkg in packages:
@@ -59,6 +61,12 @@ for filename in os.listdir(TESTCASE_FOLDER):
             dist_wh_to_dest = euclidean(wh_location, dest)
 
             total_trip = dist_to_wh + dist_wh_to_dest
+
+             # Random delay
+            delay = random.randint(1, 5)
+
+            # ASCII route visualization
+            print(f"{chosen_agent} -> {pkg['warehouse']} -> {pkg['id']} (Delay: {delay} min)")
 
             report[chosen_agent]["packages_delivered"] += 1
             report[chosen_agent]["total_distance"] += total_trip
@@ -93,4 +101,19 @@ for filename in os.listdir(TESTCASE_FOLDER):
         with open(output_path, "w") as f:
             json.dump(report, f, indent=4)
 
-        print(f"Processed {filename} → {output_file}")
+        print(f"Report Saved : {output_file}")
+
+
+        # Save best agent to CSV
+        csv_path = os.path.join(OUTPUT_FOLDER, "best_agent.csv")
+        with open(csv_path, "w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["Agent", "Packages Delivered", "Total Distance", "Efficiency"])
+            writer.writerow([
+                best_agent,
+                report[best_agent]["packages_delivered"],
+                report[best_agent]["total_distance"],
+                report[best_agent]["efficiency"]
+                ])
+
+        print("Best agent exported to best_agent.csv")
